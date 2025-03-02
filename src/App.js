@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alchemy, Network } from "alchemy-sdk";
 import "./App.css";
 
-// Set up Alchemy SDK
+
 const settings = {
 	apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
 	network: Network.ETH_MAINNET,
@@ -20,7 +20,6 @@ function App() {
 		const fetchBlockData = async () => {
 			try {
 				setLoading(true);
-				// Get the latest block number
 				const latestBlockNumber = await alchemy.core.getBlockNumber();
 				setBlockNumber(latestBlockNumber);
 
@@ -39,27 +38,21 @@ function App() {
 		};
 
 		fetchBlockData();
-
-		// Set up a refresh interval (every 15 seconds)
 		const intervalId = setInterval(fetchBlockData, 15000);
 
-		// Clean up the interval on component unmount
 		return () => clearInterval(intervalId);
-	}, []); // Empty dependency array means this runs once on mount
+	}, []);
 
-	// Format timestamp to readable date
 	const formatDate = (timestamp) => {
 		if (!timestamp) return "-";
 		return new Date(timestamp * 1000).toLocaleString();
 	};
 
-	// Format gas values to make them more readable
 	const formatGas = (gas) => {
 		if (!gas) return "-";
 		return parseInt(gas).toLocaleString();
 	};
 
-	// Calculate gas usage percentage
 	const calculateGasPercentage = () => {
 		if (!block || !block.gasUsed || !block.gasLimit) return "0%";
 		return `${(
